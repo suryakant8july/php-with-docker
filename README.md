@@ -32,10 +32,10 @@
 
   To test use `http://app-local.com` or `http://localhost/`
 
-## 6)	What you will get
+## 6)	What inside
 
   - Apache 2.4
-  - PHP 7.4 – If you required 8 then you have to update the Dockerfile.development
+  - PHP 7.4 – If you required php 8 then you have to update the Dockerfile.development
 
       ```sh
       FROM webdevops/php-apache-dev:7.4
