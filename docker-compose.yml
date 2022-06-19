@@ -1,0 +1,68 @@
+version: '3.1'
+services:
+  #######################################
+  # PHP application Docker container by Surya Kant
+  #######################################
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile.development
+    links:
+      - mysql            #For the Mysql Host 'mysql' work on the place of 'localhost'
+      - redis        
+      - mongo
+    ports:
+      - "80:80"
+    volumes:
+      - ./html:/var/www/html/
+      - ./:/docker/
+    # cap and privileged needed for slowlog
+    cap_add:
+      - SYS_PTRACE
+    privileged: true
+  #######################################
+  # MySQL server
+  #######################################
+  mysql:
+    build:
+      context: docker/mysql/    
+      dockerfile: MySQL-8.0.Dockerfile   
+    command: mysqld --default-authentication-plugin=mysql_native_password
+    ports:
+      - 13306:3306
+    volumes:
+      - mysql_data:/var/lib/mysql
+    environment:   
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+  
+  #######################################
+  # Redis
+  #######################################
+  redis:
+    build:
+      context: docker/redis/
+    volumes:
+      - redis:/data
+    ports:
+      - 16379:6379
+  #######################################
+  # mongodb
+  #######################################
+  mongo:
+    build:
+      context: docker/mongodb/
+    environment:
+    - MONGO_INITDB_ROOT_USERNAME=${MONGODB_ROOT_USER}
+    - MONGO_INITDB_ROOT_PASSWORD=${MONGODB_ROOT_PASSWORD}
+    volumes:
+    - mongo_data:/data/db    
+    ports:
+      - 27017:27017  
+volumes:
+  mysql_data:
+  redis:
+  mongo_data:
+
+

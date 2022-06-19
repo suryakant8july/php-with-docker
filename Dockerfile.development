@@ -1,0 +1,24 @@
+#++++++++++++++++++++++++++++++++++++++
+# PHP application Docker container
+#++++++++++++++++++++++++++++++++++++++
+FROM webdevops/php-apache-dev:7.4
+
+ENV PROVISION_CONTEXT "development"
+ENV WEB_DOCUMENT_ROOT=/var/www/html/ \
+    WEB_PHP_TIMEOUT=600 \
+    WEB_PHP_SOCKET=""
+ENV WEB_PHP_SOCKET=127.0.0.1:9000
+ENV WEB_NO_CACHE_PATTERN="\.(css|js|gif|png|jpg|svg|json|xml)$"
+
+# Deploy scripts/configurations
+COPY ./etc/             /opt/docker/etc/
+# Enable apache rewrite
+ENV EXT_REDIS_VERSION=4.3.0 EXT_IGBINARY_VERSION=3.0.1
+
+RUN ln -sf /opt/docker/etc/cron/crontab /etc/cron.d/docker-boilerplate \
+    && chmod 0644 /opt/docker/etc/cron/crontab \
+    && echo >> /opt/docker/etc/cron/crontab \
+    && ln -sf /opt/docker/etc/php/development.ini /opt/docker/etc/php/php.ini 
+
+# Configure volume/workdir
+WORKDIR /var/www/html/
