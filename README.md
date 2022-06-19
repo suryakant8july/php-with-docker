@@ -15,7 +15,7 @@
    **Follow the below instruction** – Recommended Ubuntu 20.04.4 LTS
   - https://docs.docker.com/desktop/windows/wsl/
 
-## 4)	Docker Setup Details:
+## 4)	Docker folder structure:
 
   - `Docker Folder:` It has the Docker file for all the containers except the main container that is Docker.developmet, it is on the root folder, to add any new container create the folder and add your Dockerfile and setting related files.
   - `etc Folder:` Configuration related settings like Apache vhost.conf or php.ini related setting will be here.
